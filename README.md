@@ -1,6 +1,6 @@
 # 自由效能进程EcoPilot v1.58 — 纯绿色效能模式管家
 
-窗口标题：自由效能进程EcoPilot-netdna518。Windows 11 任务管理器「效率模式」的批量、可记忆版本。纯 Rust + Win32 原生界面，单文件绿色运行，带专属图标。程序属性（文件版本/产品名称/产品版本/版权）已写入 exe 资源。
+自由效能进程EcoPilot-netdna518。Windows 11 任务管理器「效率模式」的批量、可记忆版本。纯 Rust + Win32 原生界面，单文件绿色运行，带专属图标。程序属性（文件版本/产品名称/产品版本/版权）已写入 exe 资源。
 
 ## 纯绿色说明
 
@@ -90,5 +90,3 @@ build.bat
 - 文档：`README.md`、`使用说明.html`、`EcoPilot-示例规则.json`、`一键应用.bat`、`自检.bat`
 
 不含：编译产物 `target/`、开发备份 `_bak_*`、本机工具链 `_toolchain/`、运行时生成的 `settings.json` / `规则-*.json` / 启动脚本与快捷方式（均由 `.gitignore` 排除）。
-
-发布 Release 时可另外附上编译好的 `EcoPilot.exe`，方便不装 Rust 的用户直接使用。
