@@ -1,0 +1,30 @@
+1 ICON "app.ico"
+
+1 VERSIONINFO
+ FILEVERSION 1,58,0,0
+ PRODUCTVERSION 1,58,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName", "netdna518"
+            VALUE "FileDescription", L"\x81ea\x7531\x6548\x80fd\x8fdb\x7a0bEcoPilot"
+            VALUE "FileVersion", "v1.58"
+            VALUE "InternalName", "EcoPilot"
+            VALUE "LegalCopyright", "netdna518"
+            VALUE "OriginalFilename", "EcoPilot.exe"
+            VALUE "ProductName", L"\x81ea\x7531\x6548\x80fd\x8fdb\x7a0bEcoPilot"
+            VALUE "ProductVersion", "v1.58"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END

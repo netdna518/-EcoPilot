@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自由效能进程EcoPilot 使用说明 · v1.58</title>
+<style>
+  :root{
+    --green:#1a7f5a; --green-d:#125c41; --green-l:#e8f5ef;
+    --ink:#1f2a30; --ink-2:#4a5a63; --line:#dde6e1; --bg:#f6f9f7; --card:#ffffff;
+    --amber:#b26a00; --blue:#2563a8; --shadow:0 2px 14px rgba(26,127,90,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.75;font-size:16px;}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px 80px}
+
+  /* 头部 */
+  header{background:linear-gradient(135deg,var(--green-d),var(--green));color:#fff;
+    padding:52px 24px 46px;text-align:center;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.16),transparent 42%);}
+  header .logo{font-size:15px;letter-spacing:3px;opacity:.85;font-weight:600}
+  header h1{font-size:40px;margin:10px 0 6px;letter-spacing:1px}
+  header p{font-size:17px;opacity:.92;max-width:620px;margin:0 auto}
+  header .tag{display:inline-block;margin-top:18px;padding:6px 16px;border:1px solid rgba(255,255,255,.5);
+    border-radius:30px;font-size:13px;opacity:.9}
+
+  /* 目录 */
+  nav{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 26px;margin:32px 0;box-shadow:var(--shadow)}
+  nav b{color:var(--green-d);font-size:14px;letter-spacing:1px}
+  nav .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 20px;margin-top:10px}
+  nav a{color:var(--ink-2);text-decoration:none;font-size:14.5px;padding:3px 0}
+  nav a:hover{color:var(--green)}
+
+  /* 章节 */
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:28px 32px;margin:22px 0;box-shadow:var(--shadow)}
+  h2{font-size:24px;color:var(--green-d);padding-bottom:12px;margin-bottom:18px;
+    border-bottom:2px solid var(--green-l);display:flex;align-items:center;gap:12px}
+  h2 .n{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;
+    background:var(--green);color:#fff;border-radius:9px;font-size:15px;flex:none}
+  h3{font-size:18px;color:var(--green);margin:22px 0 10px}
+  p{margin:10px 0;color:var(--ink-2)}
+  strong{color:var(--ink)}
+  ul,ol{margin:10px 0 10px 24px;color:var(--ink-2)}
+  li{margin:7px 0}
+  code{background:var(--green-l);color:var(--green-d);padding:2px 7px;border-radius:5px;
+    font-family:Consolas,Monaco,monospace;font-size:14px}
+
+  /* 优点卡片 */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:14px;margin:18px 0}
+  .card{background:var(--green-l);border:1px solid #d3eadd;border-radius:12px;padding:18px 20px}
+  .card h4{color:var(--green-d);font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+  .card h4 i{width:9px;height:9px;background:var(--green);border-radius:50%;display:inline-block;flex:none}
+  .card p{font-size:14.5px;margin:0}
+
+  /* 提示块 */
+  .note{border-left:4px solid var(--green);background:#f2faf6;padding:14px 18px;border-radius:0 10px 10px 0;margin:16px 0}
+  .note.warn{border-color:var(--amber);background:#fff8ee}
+  .note.info{border-color:var(--blue);background:#f0f6fc}
+  .note b{color:var(--green-d)}
+  .note.warn b{color:var(--amber)}
+  .note.info b{color:var(--blue)}
+
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:10px 13px;text-align:left;vertical-align:top}
+  th{background:var(--green-l);color:var(--green-d);font-weight:600}
+  td{color:var(--ink-2)}
+  tr:nth-child(even) td{background:#fbfdfc}
+
+  /* 按钮示意 */
+  .btn{display:inline-block;background:#fff;border:1px solid #c6d6ce;border-bottom-width:2px;
+    border-radius:6px;padding:3px 11px;font-size:13.5px;color:var(--ink);margin:2px 3px 2px 0}
+
+  /* 流程 */
+  .steps{counter-reset:s;margin:16px 0}
+  .step{position:relative;padding:0 0 18px 46px}
+  .step::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:-2px;
+    width:30px;height:30px;background:var(--green);color:#fff;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+  .step:not(:last-child)::after{content:"";position:absolute;left:14px;top:32px;bottom:0;
+    width:2px;background:var(--green-l)}
+  .step b{color:var(--green-d)}
+
+  pre{background:#1e2a25;color:#d6e8de;padding:16px 18px;border-radius:10px;overflow-x:auto;
+    font-family:Consolas,Monaco,monospace;font-size:13.5px;line-height:1.6;margin:14px 0}
+  pre .c{color:#7fa892}
+
+  footer{text-align:center;color:var(--ink-2);font-size:13px;margin-top:40px;padding-top:20px;
+    border-top:1px solid var(--line)}
+
+  @media(max-width:640px){
+    header h1{font-size:30px} section{padding:22px 18px} h2{font-size:20px}
+    body{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">自由效能进程 ECOPILOT · NETDNA518</div>
+  <h1>让电脑安静、省电、更流畅</h1>
+  <p>把 Windows 任务管理器里「效率模式」这一个功能，变成可批量、可记忆、可开机自动执行的绿色小工具。</p>
+  <span class="tag">v1.58 · 纯绿色 · 不写注册表 · 单文件运行</span>
+</header>
+
+<div class="wrap">
+
+<nav>
+  <b>目录</b>
+  <div class="grid">
+    <a href="#s1">一、什么是效能模式</a>
+    <a href="#s2">二、为什么需要自由效能进程EcoPilot</a>
+    <a href="#s3">三、快速上手</a>
+    <a href="#s4">四、界面与按钮</a>
+    <a href="#s5">五、规则：一劳永逸</a>
+    <a href="#s6">六、开机自动挡</a>
+    <a href="#s7">七、典型使用场景</a>
+    <a href="#s8">八、绿色与安全</a>
+    <a href="#s9">九、常见问题</a>
+  </div>
+</nav>
+
+<!-- 1 -->
+<section id="s1">
+  <h2><span class="n">1</span>什么是效能模式</h2>
+  <p>效能模式（Efficiency mode）是 Windows 10 1709 之后内置的能力，本质上同时做两件事：把进程的<strong>优先级降为「空闲」</strong>，并打开 <strong>EcoQoS</strong>（让 CPU 调度优先采用节能运行状态）。它不会关闭程序，只是让这个程序「更懂事地让出资源」。</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4><i></i>降低 CPU 资源消耗</h4>
+      <p>降低进程争夺 CPU 的优先级，减少不重要的后台程序对 CPU 的干扰，让前台正在使用的软件更容易拿到资源。</p>
+    </div>
+    <div class="card">
+      <h4><i></i>降低功耗和发热</h4>
+      <p>通过 EcoQoS 引导 CPU 优先运行在节能状态，减少不必要的高性能运转，降低功耗与温度——笔记本上能明显延长续航。</p>
+    </div>
+    <div class="card">
+      <h4><i></i>改善前台程序体验</h4>
+      <p>多个程序同时运行时，后台不再抢 CPU，前台程序更少卡顿，多任务切换更跟手。</p>
+    </div>
+    <div class="card">
+      <h4><i></i>减少后台程序干扰</h4>
+      <p>后台浏览器标签页、暂时不用的软件、后台数据处理、不需即时响应的辅助程序，都会主动让出 CPU。</p>
+    </div>
+    <div class="card">
+      <h4><i></i>降低整机能效开销</h4>
+      <p>多个后台进程开启后，整体 CPU 能耗下降，减少处理器高频运行，散热负担变轻——风扇噪声也会随之减小（视硬件与负载而定）。</p>
+    </div>
+  </div>
+
+  <div class="note info"><b>一句话理解：</b>效能模式不是「冻结」程序，而是告诉系统「这个程序不着急，资源先紧着别人」。它照常运行，只是不再抢跑。</div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <h2><span class="n">2</span>为什么需要自由效能进程EcoPilot</h2>
+  <p>Windows 自带的效率模式好用，但只在任务管理器里能点，而且<strong>每次开机都要重新点一遍</strong>——进程一多就很麻烦。自由效能进程EcoPilot 就是为了解决这个重复劳动。</p>
+  <table>
+    <tr><th>对比</th><th>任务管理器手动设置</th><th>自由效能进程EcoPilot</th></tr>
+    <tr><td>操作方式</td><td>逐个右键 → 效率模式，进程多了很累</td><td>勾选几个进程或按规则，一键批量应用</td></tr>
+    <tr><td>记忆能力</td><td>重启程序后设置失效</td><td>规则保存在程序目录，长期有效</td></tr>
+    <tr><td>开机自动</td><td>做不到</td><td>生成启动脚本，登录时静默自动应用</td></tr>
+    <tr><td>批量还原</td><td>要一个个改回</td><td>「移除所有效能」一键恢复</td></tr>
+    <tr><td>附带开销</td><td>—</td><td>纯绿色单文件，隐藏时 CPU 占用为零</td></tr>
+  </table>
+  <div class="note"><b>适合谁：</b>笔记本续航焦虑者、后台常开一堆软件的人、希望前台游戏/办公更流畅的人、想让电脑更安静的人。</div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <h2><span class="n">3</span>快速上手</h2>
+  <div class="steps">
+    <div class="step"><b>运行程序。</b>双击 <code>EcoPilot.exe</code>，无需安装。主界面分三块：左侧进程列表、右上「当前效能进程」、右下「规则」。</div>
+    <div class="step"><b>找到要处理的进程。</b>在左侧搜索框输入进程名关键字，列表实时过滤并定位；也可以点列头排序。</div>
+    <div class="step"><b>设为效能模式。</b>勾选一个或多个进程，点顶部「设为效能模式」；或者直接<strong>双击某个进程</strong>切换它的效能状态。</div>
+    <div class="step"><b>想建规则就点「加入规则」。</b>把常用后台软件归到一条规则里，以后点「立即应用规则」一次搞定。</div>
+    <div class="step"><b>想开机自动，进「设置」。</b>勾上「启动/进入时自动应用规则」，点工具栏「生成开机启动脚本」生成 bat 和快捷方式，把其中一个放进启动文件夹即可（两者都指向真实程序名、带静默参数）。</div>
+  </div>
+  <div class="note warn"><b>核心系统进程受保护：</b>csrss、wininit、winlogon、services、lsass、svchost、dwm、System、MsMpEng 等内置保护名单里的进程不会被设为效能模式，状态列会显示「内置保护」。你也可以在设置或右键里添加自己的保护名单。</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <h2><span class="n">4</span>界面与按钮</h2>
+  <h3>左侧 · 进程列表</h3>
+  <p>每个进程名前带该程序的小图标（像任务管理器一样从可执行文件提取），显示 PID、CPU、内存、磁盘、网络、效能状态与路径。状态列分为 <code>已效能</code> / <code>内置保护</code> / <code>用户保护</code> / <code>普通</code>。</p>
+
+  <h3>右上 · 当前效能进程</h3>
+  <p>列出所有已被效能化的进程。节点前的 <code>+</code> / <code>−</code> 可展开折叠；右键节点可单独「移除效能模式」或「移除所有进程的效能模式」。</p>
+
+  <h3>右下 · 规则树</h3>
+  <p>显示每条规则的名字与成员数，默认展开。展开后能看到每个成员进程及其状态，例如 <code>chrome.exe PID 2660 效能中</code>。右键规则可新建、重命名、移出成员。</p>
+
+  <h3>顶部工具栏</h3>
+  <p>
+    <span class="btn">刷新 (F5)</span>
+    <span class="btn">设为效能模式</span>
+    <span class="btn">移除效能模式</span>
+    <span class="btn">加入规则</span>
+    <span class="btn">立即应用规则</span>
+    <span class="btn">移除所有效能</span>
+    <span class="btn">自动刷新：开/关</span>
+    <span class="btn">生成开机启动脚本</span>
+    <span class="btn">所有用户启动文件夹</span>
+    <span class="btn">当前用户启动文件夹</span>
+    <span class="btn">设置</span>
+    <span class="btn">退出</span>
+  </p>
+  <div class="note info"><b>低占用设计：</b>界面显示时按自动刷新间隔（默认 5 秒）采样一次；缩到托盘或隐藏窗口后定时器彻底停止，CPU 占用为零。设置里的「定时自动刷新」开关可以完全关闭周期性采样。</div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <h2><span class="n">5</span>规则：一劳永逸</h2>
+  <p>规则就是「一组进程 + 一个名字」。程序目录里每个 <code>规则-xxx.json</code> 文件就是一条规则，有几个文件就有几条规则。</p>
+  <pre>{
+  "name": "功能类",
+  "members": ["chrome.exe", "Boom3D.exe"],
+  "path": "",
+  "match_path": false,
+  "enabled": true,
+  "restore_priority": 32,
+  "note": ""
+}</pre>
+  <ul>
+    <li>点「加入规则」不会自动建规则，而是让你选择加入已有规则或新建规则。</li>
+    <li>一条规则可含多个进程；<code>enabled</code> 为 <code>false</code> 时该规则不参与自动应用。</li>
+    <li>重命名 / 删除规则时，程序会自动同步配置里引用的规则名，不会出现「名字对不上」导致自动应用失效。</li>
+  </ul>
+  <div class="note warn"><b>应用失败怎么办：</b>点「立即应用规则」后若有进程失败（多为瞬时进程刚退出或权限不足），会弹出失败清单：进程名、PID、所属规则、原因，默认全选。点「从规则移出勾选的进程」即可把它们从规则里删掉，以后不再尝试。</div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <h2><span class="n">6</span>开机自动挡</h2>
+  <p>让效能模式在每次登录时自动生效，全程看不到程序界面、应用完就退出。</p>
+  <div class="steps">
+    <div class="step"><b>在设置里勾选两项。</b>「启动/进入时自动应用规则」+「自动应用规则成功后自动退出本程序（静默后台模式）」。</div>
+    <div class="step"><b>指定要应用的规则。</b>设置里「启动时应用哪些规则」勾选指定几条；全不勾表示应用全部启用规则。</div>
+    <div class="step"><b>生成启动文件。</b>点工具栏「生成开机启动脚本」，程序会在自身目录生成两个文件：<code>真实程序名+开机启动-请复制到启动文件夹.bat</code> 和 <code>真实程序名+开机启动-请复制到启动文件夹.lnk</code>（快捷方式），例如 <code>自由效能进程EcoPilot-v1.58开机启动-请复制到启动文件夹.lnk</code>。两者都自动指向当前真实的程序文件名（程序改名也能正确找到），并带 <code>--apply --tray</code> 静默参数，弹出说明。</div>
+    <div class="step"><b>放进启动文件夹。</b>点旁边「所有用户启动文件夹」或「当前用户启动文件夹」按钮打开对应目录，把 bat 或快捷方式复制进去（任选其一，推荐快捷方式更美观）。也可按 <code>Win + R</code> 输入 <code>shell:startup</code> 快速打开当前用户的启动文件夹。</div>
+  </div>
+  <div class="note"><b>效果：</b>下次登录时，程序在后台按规则应用效能模式，完成后立即退出，不留后台进程、不弹界面。这样你开机后那些常驻的后台软件就已经处于低耗状态了。</div>
+  <div class="note warn"><b>想改回来：</b>静默模式看不到界面。用记事本打开程序目录里的 <code>settings.json</code>，把 <code>"exit_after_apply": true</code> 里的 <code>true</code> 改成 <code>false</code>，保存后再启动程序就能看到界面了。（在设置里点确定只保存配置、不会当场重新应用规则。）</div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <h2><span class="n">7</span>典型使用场景</h2>
+  <table>
+    <tr><th>场景</th><th>怎么做</th><th>收益</th></tr>
+    <tr><td>笔记本外出办公</td><td>把后台同步盘、更新服务、常驻软件加入规则并开机自动应用</td><td>降低功耗发热，延长续航</td></tr>
+    <tr><td>游戏 / 重度办公</td><td>把不相关的后台程序设为效能模式</td><td>CPU 优先供给前台，减少卡顿</td></tr>
+    <tr><td>后台挂着很多浏览器标签</td><td>把浏览器进程加入规则</td><td>后台标签不再抢资源，前台更流畅</td></tr>
+    <tr><td>安静env（夜间 / 卧室）</td><td>批量效能化常驻后台程序</td><td>减少高频运行，风扇噪声更小</td></tr>
+    <tr><td>临时处理一堆程序</td><td>勾选后一键应用，用完「移除所有效能」一键还原</td><td>来去自由，不留痕迹</td></tr>
+  </table>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <h2><span class="n">8</span>绿色与安全</h2>
+  <ul>
+    <li><strong>全部配置只在程序目录：</strong><code>settings.json</code>（设置）和 <code>规则-*.json</code>（每条规则一个文件，直接放在程序文件夹里，一眼可见）。</li>
+    <li><strong>不写注册表、不写系统目录、不写 %APPDATA%。</strong>程序启动时会一次性清除旧版遗留的注册表启动项。</li>
+    <li><strong>不请求管理员权限：</strong>以 <code>asInvoker</code> 运行，不弹 UAC。对少数系统进程设置/移除效能会被拒绝（弹「部分失败」），这是正常的权限限制，不影响其他进程。</li>
+    <li><strong>可回滚：</strong>任何效能设置都能用「移除效能模式」或「移除所有效能」还原为普通优先级。</li>
+  </ul>
+  <h3>命令行</h3>
+  <pre>EcoPilot.exe                 <span class="c"># 启动界面</span>
+EcoPilot.exe --selftest      <span class="c"># 自检 EcoQoS 是否可用</span>
+EcoPilot.exe --list          <span class="c"># 列出进程及效能状态</span>
+EcoPilot.exe --apply         <span class="c"># 应用规则后启动界面</span>
+EcoPilot.exe --apply --tray  <span class="c"># 应用规则后仅在托盘运行</span></pre>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+  <h2><span class="n">9</span>常见问题</h2>
+  <h3>任务管理器里看，效能好像没生效？</h3>
+  <p>用命令行 <code>EcoPilot.exe --list</code> 查看最可靠，状态列显示「效能中」即为已生效。任务管理器的列可能有刷新延迟，需要重新打开或等待刷新。</p>
+  <h3>某些进程设置失败？</h3>
+  <p>常见原因：进程是瞬时进程、刚好退出、或权限不足。失败的进程会在失败清单里列出，可一键从规则移出。内置保护名单里的系统进程是故意跳过的。</p>
+  <h3>静默启动后看不到界面，怎么改设置？</h3>
+  <p>按上文「开机自动挡」里的方法，编辑 <code>settings.json</code> 把 <code>exit_after_apply</code> 改为 <code>false</code>。</p>
+  <h3>效能模式会不会让程序停止工作？</h3>
+  <p>不会。它只降低优先级和切换 EcoQoS，程序照常运行；前台需要它时系统会正常调度。真正需要强响应的程序，别加入规则即可。</p>
+  <h3>关闭窗口是退出程序吗？</h3>
+  <p>在设置里可开启「关闭按钮缩到托盘」：点 X 只隐藏窗口，托盘图标右键「退出」才真正退出。</p>
+</section>
+
+<footer>
+  自由效能进程EcoPilot v1.58 · netdna518 &nbsp;|&nbsp; 所有配置仅保存在程序所在文件夹 &nbsp;|&nbsp; 让该省的电省下来，把资源留给正在使用的程序
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "name": "后台同步",
+      "members": ["OneDrive.exe"],
+      "path": "",
+      "match_path": false,
+      "enabled": true,
+      "restore_priority": 32,
+      "note": "导入后会在 rules 目录生成 规则-后台同步.json"
+    },
+    {
+      "name": "浏览器",
+      "members": ["chrome.exe", "msedge.exe"],
+      "path": "",
+      "match_path": false,
+      "enabled": true,
+      "restore_priority": 32,
+      "note": "一条规则可含多个进程"
+    }
+  ]
+}
